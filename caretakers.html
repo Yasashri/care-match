@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Browse Caretakers — CareMatch</title>
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/caretakers.css">
+</head>
+<body>
+  <div class="container hero fade-in">
+    <div>
+      <h1>Browse & filter caretakers</h1>
+      <p>Search by area, experience and rating. Click any card to see a detailed profile and hire.</p>
+      <div class="searchbar">
+        <input id="q" placeholder="Kaohsiung, stroke, Mandarin..." />
+        <select id="minRating">
+          <option value="0">Any rating</option>
+          <option value="4">4★ and up</option>
+          <option value="4.5">4.5★ and up</option>
+        </select>
+        <select id="minExp">
+          <option value="0">Any exp</option>
+          <option value="3">3+ yrs</option>
+          <option value="5">5+ yrs</option>
+        </select>
+        <button class="primary" id="filterBtn">Filter</button>
+      </div>
+    </div>
+  </div>
+  <div class="container grid cards" id="list"></div>
+
+  <div class="toast"></div>
+  <script src="js/data.caretakers.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/caretakers.js"></script>
+</body>
+</html>

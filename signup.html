@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sign Up — CareMatch</title>
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/signup.css">
+</head>
+<body>
+  <div class="container hero fade-in">
+    <div>
+      <h1>Create your account</h1>
+      <p>Choose your role and verify your phone via a one-time code to keep the community safe.</p>
+      <form id="signupForm" class="grid" style="gap:.8rem;max-width:700px">
+        <div class="grid" style="grid-template-columns:1fr 1fr;gap:.6rem">
+          <input required name="firstName" placeholder="First name">
+          <input required name="lastName" placeholder="Last name">
+        </div>
+        <input required type="email" name="email" placeholder="Email">
+        <div class="grid" style="grid-template-columns:1fr 1fr;gap:.6rem">
+          <input required name="address" placeholder="Address">
+          <input required name="contact" placeholder="Contact number">
+        </div>
+        <div class="grid" style="grid-template-columns:1fr 1fr;gap:.6rem">
+          <input required name="password" type="password" placeholder="Password (min 6 chars)">
+          <select name="role">
+            <option value="seeker">I need a caretaker</option>
+            <option value="caretaker">I am a caretaker</option>
+          </select>
+        </div>
+        <div class="grid" style="grid-template-columns:1fr auto;gap:.6rem">
+          <input name="otp" placeholder="Enter OTP to verify phone">
+          <button type="button" id="sendOtp" class="ghost">Send OTP</button>
+        </div>
+        <button class="primary">Create account</button>
+      </form>
+    </div>
+  </div>
+  <div class="toast"></div>
+  <script src="js/common.js"></script>
+  <script src="js/signup.js"></script>
+</body>
+</html>

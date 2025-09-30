@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CareMatch — Hire Trusted Caretakers</title>
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+  <div class="hero container fade-in">
+    <div>
+      <span class="badge"><span class="dot"></span> Trusted Care within reach</span>
+      <h1>Find a compassionate caretaker for your loved ones — safely and fast.</h1>
+      <p>Browse verified caretakers, review experience and ratings, and hire with confidence. Built for families
+         needing eldercare or support for recovery at home.</p>
+      <div class="searchbar">
+        <input id="q" placeholder="Search by name, skill or area (e.g., dementia, Kaohsiung)" />
+        <select id="minRating">
+          <option value="0">Any rating</option>
+          <option value="4">4★ and up</option>
+          <option value="4.5">4.5★ and up</option>
+        </select>
+        <button class="primary" id="searchBtn">Search</button>
+      </div>
+    </div>
+    <div>
+      <div class="grid kpis">
+        <div class="kpi"><div class="v">1200+</div><div class="muted">Families served</div></div>
+        <div class="kpi"><div class="v">4.8★</div><div class="muted">Average rating</div></div>
+        <div class="kpi"><div class="v">24/7</div><div class="muted">Support</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container grid cards" id="featured"></div>
+
+  <footer class="container">
+    <div class="row">
+      <div>© <span id="yr"></span> CareMatch</div>
+      <div class="muted">Made with ❤️ for families</div>
+    </div>
+  </footer>
+
+  <div class="toast"></div>
+  <script src="js/data.caretakers.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/index.js"></script>
+</body>
+</html>
