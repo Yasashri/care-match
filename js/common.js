@@ -16,10 +16,10 @@ const Storage = {
   if(!Storage.get('caretakers')){
     if (window.CARETAKERS && Array.isArray(window.CARETAKERS) && window.CARETAKERS.length){ Storage.set('caretakers', window.CARETAKERS); return; }
     const demos = [
-      {id:'ct-1001', firstName:'Lina', lastName:'Hsu', email:'lina.hsu@example.com', address:'Zuoying, Kaohsiung', contact:'+886 912 345 678', experience:6, rating:4.8, verified:true, bio:'Experienced eldercare nurse specializing in dementia support and nutrition.', avatar:'https://i.pravatar.cc/120?img=47'},
-      {id:'ct-1002', firstName:'Ravi', lastName:'Perera', email:'ravi.perera@example.com', address:'Sanmin, Kaohsiung', contact:'+886 987 654 321', experience:4, rating:4.5, verified:true, bio:'Kind and patient caregiver with focus on mobility assistance and stroke recovery.', avatar:'https://i.pravatar.cc/120?img=12'},
-      {id:'ct-1003', firstName:'Mei', lastName:'Chen', email:'mei.chen@example.com', address:'Gushan, Kaohsiung', contact:'+886 923 111 222', experience:8, rating:4.9, verified:true, bio:'Licensed practical nurse, palliative care specialist, fluent in Mandarin and English.', avatar:'https://i.pravatar.cc/120?img=32'},
-      {id:'ct-1004', firstName:'Sanjaya', lastName:'Jay', email:'s.jay@example.com', address:'Fengshan, Kaohsiung', contact:'+886 955 666 777', experience:3, rating:4.2, verified:false, bio:'Home-visit caregiver focused on daily living assistance and companionship.', avatar:'https://i.pravatar.cc/120?img=5'}
+      {id:'ct-1001', firstName:'Lina', lastName:'Hsu', email:'lina.hsu@example.com', address:'Zuoying, Kandy', contact:'+886 912 345 678', experience:6, rating:4.8, verified:true, bio:'Experienced eldercare nurse specializing in dementia support and nutrition.', avatar:'https://i.pravatar.cc/120?img=47'},
+      {id:'ct-1002', firstName:'Ravi', lastName:'Perera', email:'ravi.perera@example.com', address:'Sanmin, Kandy', contact:'+886 987 654 321', experience:4, rating:4.5, verified:true, bio:'Kind and patient caregiver with focus on mobility assistance and stroke recovery.', avatar:'https://i.pravatar.cc/120?img=12'},
+      {id:'ct-1003', firstName:'Mei', lastName:'Chen', email:'mei.chen@example.com', address:'Gushan, Kandy', contact:'+886 923 111 222', experience:8, rating:4.9, verified:true, bio:'Licensed practical nurse, palliative care specialist, fluent in Mandarin and English.', avatar:'https://i.pravatar.cc/120?img=32'},
+      {id:'ct-1004', firstName:'Sanjaya', lastName:'Jay', email:'s.jay@example.com', address:'Fengshan, Kandy', contact:'+886 955 666 777', experience:3, rating:4.2, verified:false, bio:'Home-visit caregiver focused on daily living assistance and companionship.', avatar:'https://i.pravatar.cc/120?img=5'}
     ];
     Storage.set('caretakers', demos);
   }
