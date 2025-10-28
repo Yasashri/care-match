@@ -47,23 +47,30 @@ function initNavbar(active=''){
         <button class="ghost" id="nav-logout" style="display:none">Logout</button>
       </div>
     </div>`;
+  // Create and add overlay
+  const overlay = document.createElement('div');
+  overlay.className = 'nav-overlay';
+  document.body.prepend(overlay);
   document.body.prepend(nav);
 
   // Hamburger menu functionality
   const hamburger = $('.hamburger');
   const navlinks = $('.navlinks');
   
+  function toggleMenu(show) {
+    hamburger.classList.toggle('active', show);
+    navlinks.classList.toggle('active', show);
+    overlay.classList.toggle('active', show);
+    document.body.style.overflow = show ? 'hidden' : '';
+  }
+  
   hamburger.addEventListener('click', () => {
-    hamburger.classList.toggle('active');
-    navlinks.classList.toggle('active');
+    toggleMenu(!navlinks.classList.contains('active'));
   });
 
-  // Close menu when clicking outside
-  document.addEventListener('click', (e) => {
-    if (!nav.contains(e.target) && navlinks.classList.contains('active')) {
-      hamburger.classList.remove('active');
-      navlinks.classList.remove('active');
-    }
+  // Close menu when clicking overlay
+  overlay.addEventListener('click', () => {
+    toggleMenu(false);
   });
 
   // Close menu when clicking on a link

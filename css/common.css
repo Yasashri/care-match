@@ -176,6 +176,21 @@ nav{
   transform: translateY(-8px) rotate(-45deg);
 }
 
+.nav-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 40;
+}
+
+.nav-overlay.active {
+  display: block;
+}
+
 .navlinks{
   display:flex;
   gap:.6rem;
@@ -202,9 +217,10 @@ nav{
   }
   
   .navlinks {
+    display: none;
     position: fixed;
     top: 0;
-    right: -100%;
+    right: 0;
     width: 80%;
     max-width: 300px;
     height: 100vh;
@@ -212,14 +228,34 @@ nav{
     flex-direction: column;
     padding: 5rem 1.5rem 2rem;
     gap: 1rem;
-    transition: right 0.3s ease;
     border-left: 1px solid #1f2937;
     backdrop-filter: blur(10px);
   }
 
   .navlinks.active {
-    right: 0;
+    display: flex;
+    animation: slideIn 0.3s ease forwards;
   }
+  
+  @keyframes slideIn {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+/* Desktop pager container alignment and tighter sizing */
+@media (min-width: 768px) {
+  /* ensure the pager wrapper centers its contents */
+  #pager { display:flex; justify-content:center; }
+  .pager-controls { gap: .5rem; }
+  .pager-controls button { padding: .45rem .6rem; min-width: 38px; }
+  .pager-controls .page-num { padding: .35rem .5rem; min-width: 34px; }
+  .pager-controls .badge { padding: .35rem .5rem; }
+  .pager-controls .ghost[disabled] { opacity: .55; cursor: default; }
+}
 
   .navlinks a, .navlinks button {
     width: 100%;
