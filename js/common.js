@@ -32,6 +32,11 @@ function initNavbar(active=''){
   nav.innerHTML = `
     <div class="container navbar">
       <a class="brand" href="index.html"><span class="logo"></span> CareMatch</a>
+      <button class="hamburger" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
       <div class="navlinks">
         <a href="index.html" class="${active==='home'?'active':''}">Home</a>
         <a href="caretakers.html" class="${active==='browse'?'active':''}">Browse Caretakers</a>
@@ -43,6 +48,31 @@ function initNavbar(active=''){
       </div>
     </div>`;
   document.body.prepend(nav);
+
+  // Hamburger menu functionality
+  const hamburger = $('.hamburger');
+  const navlinks = $('.navlinks');
+  
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('active');
+    navlinks.classList.toggle('active');
+  });
+
+  // Close menu when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!nav.contains(e.target) && navlinks.classList.contains('active')) {
+      hamburger.classList.remove('active');
+      navlinks.classList.remove('active');
+    }
+  });
+
+  // Close menu when clicking on a link
+  navlinks.querySelectorAll('a, button').forEach(link => {
+    link.addEventListener('click', () => {
+      hamburger.classList.remove('active');
+      navlinks.classList.remove('active');
+    });
+  });
 
   const user = Storage.get('currentUser', null);
   const navLogin = $('#nav-login'), navSignup = $('#nav-signup');

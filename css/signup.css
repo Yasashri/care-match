@@ -1,2 +1,16 @@
-
-/* signup page */
+.signup-box {
+  height: calc(100vh - 80px);
+  display: flex;
+  justify-content: center;
+  p {
+    margin-bottom: 20px;
+  }
+  select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+  select::ms-expand {
+    display: none;
+  }
+}

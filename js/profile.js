@@ -20,17 +20,25 @@ function avgRatingFor(caretakerId, fallback){
 
 function ratingStars(current=0){
   const wrap = document.createElement('div');
-  wrap.style = 'display:flex;gap:.35rem;align-items:center;flex-wrap:wrap;margin:.6rem 0';
-  const label = document.createElement('span'); label.textContent = 'Rate this caretaker:';
+  wrap.className = 'rating-stars';
+  
+  const label = document.createElement('span');
+  label.textContent = 'Rate this caretaker:';
   label.className = 'muted';
+
+  const starsRow = document.createElement('div');
+  starsRow.className = 'stars-row';
+  
   const stars = Array.from({length:5}).map((_,i)=>{
     const b = document.createElement('button');
-    b.type='button'; b.className = 'ghost'; b.setAttribute('aria-label', `Rate ${i+1} stars`);
+    b.type = 'button';
+    b.className = 'ghost';
+    b.setAttribute('aria-label', `Rate ${i+1} stars`);
     b.innerHTML = '★';
     b.dataset.v = String(i+1);
-    b.style.fontSize = '1.2rem';
     return b;
   });
+  
   function paint(v){
     stars.forEach((s,idx)=>{
       s.style.color = (idx < v) ? '#fde047' : '#94a3b8';
@@ -55,8 +63,9 @@ function ratingStars(current=0){
     if(badge) badge.innerHTML = `<span class="dot"></span>${newAvg}★`;
     paint(v);
   }));
-  stars.forEach(s=>wrap.appendChild(s));
-  wrap.prepend(label);
+  stars.forEach(s => starsRow.appendChild(s));
+  wrap.appendChild(label);
+  wrap.appendChild(starsRow);
   return wrap;
 }
 
@@ -68,35 +77,84 @@ else{
 wrap.innerHTML = `
     <div class="profile">
       <div class="card" data-magnet>
-        <img src="${c.avatar}" alt="${formatName(c)}" />
-        <h2 style="margin:.6rem 0">${formatName(c)}</h2>
-        <div class="row"><span class="badge" id="avgBadge"><span class="dot"></span>${avg}★</span><span class="muted">· ${c.experience} years exp</span></div>
-        <p>${c.bio}</p>
-        <ul class="kv">
-          <li>📧 ${c.email}</li>
-          <li>📍 ${c.address} ${vIcon}</li>
-          <li>📞 ${c.contact} ${vIcon}</li>
-        </ul>
-        <div id="rateBox"></div>
-      </div>
-      <div class="card hireBox">
-        <h3>Request Care</h3>
-        <p class="muted">Tell us when you need help. We'll notify ${c.firstName}.</p>
-        <div class="row">
-          <div style="display:flex;gap:.6rem;flex-wrap:wrap;width:100%">
-            <div style="display:flex;flex-direction:column;gap:.3rem;min-width:180px;flex:1">
-              <label class="muted" for="startDate">Start date</label>
-              <input type="date" id="startDate">
-            </div>
-            <div style="display:flex;flex-direction:column;gap:.3rem;min-width:180px;flex:1">
-              <label class="muted" for="endDate">End date</label>
-              <input type="date" id="endDate">
+        <img src="${c.avatar}" alt="" class="cover-photo" />
+        <div class="profile-header">
+          <img src="${c.avatar}" alt="${formatName(c)}" />
+          <div>
+            <h2 style="margin:0 0 .5rem">${formatName(c)}</h2>
+            <div class="stats">
+              <span class="badge" id="avgBadge"><span class="dot"></span>${avg}★</span>
+              <span class="badge"><span class="dot"></span>${c.experience} years experience</span>
             </div>
           </div>
         </div>
-        <textarea id="notes" placeholder="Notes (e.g., mobility support, medication reminders)"></textarea>
-        <button class="primary" id="hireBtn">Send Request</button>
-        <div class="muted" style="margin-top:.6rem">You must be logged in to request care.</div>
+        
+        ${c.verified ? `
+        <div class="verified-info">
+          <span class="verified">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M20 6L9 17l-5-5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Verified Caretaker
+          </span>
+          <span class="muted">Background checked and credentials verified</span>
+        </div>
+        ` : ''}
+
+        <p style="margin:1rem 0;line-height:1.6">${c.bio}</p>
+        
+        <div id="rateBox" class="rating-stars"></div>
+
+        <ul class="kv">
+          <li>
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+            </svg>
+            ${c.email}
+          </li>
+          <li>
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            ${c.address}
+          </li>
+          <li>
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+            </svg>
+            ${c.contact}
+          </li>
+        </ul>
+      </div>
+
+      <div class="card hire-box">
+        <h3>Request Care</h3>
+        <p class="muted">Tell us when you need help. We'll notify ${c.firstName}.</p>
+        
+        <div class="date-inputs">
+          <div class="input-group">
+            <label class="muted" for="startDate">Start date</label>
+            <input type="date" id="startDate" min="${new Date().toISOString().split('T')[0]}">
+          </div>
+          <div class="input-group">
+            <label class="muted" for="endDate">End date</label>
+            <input type="date" id="endDate" min="${new Date().toISOString().split('T')[0]}">
+          </div>
+        </div>
+
+        <textarea id="notes" placeholder="Additional details about care needs (e.g., mobility support, medication schedule, specific requirements)"></textarea>
+        
+        <button class="primary" id="hireBtn">
+          <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="margin-right:8px">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+          </svg>
+          Send Care Request
+        </button>
+
+        <div class="muted" style="margin-top:1rem;text-align:center;padding:.75rem;border:1px solid #334155;border-radius:.6rem">
+          You must be logged in to request care
+        </div>
       </div>
     </div>
   `;

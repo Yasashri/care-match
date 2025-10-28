@@ -11,16 +11,35 @@ let filtered = [...caretakers];
 
 function card(c){
   const vIcon = c.verified ? `<span class="verified"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 6L9 17l-5-5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Verified</span>` : '';
+  
+  // Extract skills from bio for tags
+  const skills = c.bio.toLowerCase()
+    .match(/(?:specializing in|specialist|focus on|expertise in) ([\w\s,]+)/i)?.[1]
+    ?.split(/,|\sand\s/)
+    .map(s => s.trim())
+    .filter(s => s.length > 0) || [];
+
   return `<a class="card" data-magnet href="profile.html?id=${c.id}">
-    <div class="row">
-      <h3>${formatName(c)}</h3>
-      <span class="badge"><span class="dot"></span>${c.rating}★</span>
+    <div class="card-header">
+      <img src="${c.avatar}" alt="${formatName(c)}" class="avatar" loading="lazy">
+      <div class="card-info">
+        <div class="row">
+          <h3>${formatName(c)}</h3>
+          <span class="badge"><span class="dot"></span>${c.rating}★</span>
+        </div>
+        <div class="card-meta">
+          <div class="meta">📍 ${c.address}</div>
+          <div class="meta">⌛ ${c.experience} yrs</div>
+          ${vIcon}
+        </div>
+      </div>
     </div>
     <div class="muted">${c.bio}</div>
-    <div class="row" style="margin-top:.8rem">
-      <div class="meta">📍 ${c.address} ${vIcon}</div>
-      <div class="meta">⌛ ${c.experience} yrs</div>
+    ${skills.length ? `
+    <div class="skill-tags">
+      ${skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
     </div>
+    ` : ''}
   </a>`
 }
 
@@ -30,7 +49,7 @@ function renderPagination(){
   const wrap = document.createElement('div');
   wrap.className = 'container';
   const controls = document.createElement('div');
-  controls.style = 'display:flex;gap:.5rem;justify-content:center;margin:1rem 0;flex-wrap:wrap';
+  controls.className = 'pager-controls';
   const makeBtn = (label, disabled, handler)=>{
     const b = document.createElement('button');
     b.textContent = label;
@@ -43,8 +62,9 @@ function renderPagination(){
   );
   // Page numbers (compact)
   for(let p=Math.max(1,page-2); p<=Math.min(totalPages, page+2); p++){
-    const b = makeBtn(String(p), p===page, ()=>{ page=p; render() });
-    if(p===page){ b.className='badge' }
+    const b = makeBtn(String(p), false, ()=>{ page=p; render() });
+    b.classList.add('page-num');
+    if(p===page){ b.classList.remove('ghost'); b.classList.add('badge'); b.setAttribute('aria-current','page'); }
     controls.append(b);
   }
   controls.append(
@@ -63,22 +83,71 @@ function render(){
   if(oldP) oldP.remove();
   const pager = renderPagination();
   pager.id = 'pager';
-  document.body.appendChild(pager);
+  // Insert pager directly after the results list container for correct layout
+  list.parentNode.insertBefore(pager, list.nextSibling);
 }
 
 // initial render
 render();
 
-$('#filterBtn').addEventListener('click', ()=>{
+function updateResults() {
+  const resultsInfo = $('#results-info');
+  const resultsCount = $('#results-count');
+  
+  if (filtered.length > 0) {
+    resultsCount.textContent = filtered.length;
+    resultsInfo.style.display = 'block';
+  } else {
+    resultsInfo.style.display = 'none';
+  }
+}
+
+// Debounce function for search
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+
+function filterCaretakers() {
   const q = $('#q').value.trim().toLowerCase();
   const minR = parseFloat($('#minRating').value);
   const minE = parseInt($('#minExp').value,10);
+  
   filtered = caretakers.filter(c=>{
     const hay = [c.firstName, c.lastName, c.address, c.bio].join(' ').toLowerCase();
     const okQ = q ? hay.includes(q) : true;
     return okQ && c.rating>=minR && c.experience>=minE;
   });
+  
   page = 1;
-  if(filtered.length===0) showToast('No matches for your filters');
-  render();
-});
+  if(filtered.length===0) {
+    showToast('No matches for your filters');
+    list.innerHTML = `
+      <div class="card" style="text-align: center">
+        <h3>No matches found</h3>
+        <p class="muted">Try adjusting your filters or search terms</p>
+      </div>
+    `;
+  } else {
+    render();
+  }
+  updateResults();
+}
+
+// Add event listeners
+$('#filterBtn').addEventListener('click', filterCaretakers);
+
+// Add input event listener with debounce for mobile
+const debouncedFilter = debounce(filterCaretakers, 300);
+$('#q').addEventListener('input', debouncedFilter);
+
+// Add change listeners for select elements
+$('#minRating').addEventListener('change', filterCaretakers);
+$('#minExp').addEventListener('change', filterCaretakers);
