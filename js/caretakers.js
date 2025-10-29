@@ -50,6 +50,16 @@ function renderPagination(){
   wrap.className = 'container';
   const controls = document.createElement('div');
   controls.className = 'pager-controls';
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handlePageChange = (newPage) => {
+    page = newPage;
+    render();
+    scrollToTop();
+  };
+
   const makeBtn = (label, disabled, handler)=>{
     const b = document.createElement('button');
     b.textContent = label;
@@ -58,17 +68,17 @@ function renderPagination(){
     return b;
   };
   controls.append(
-    makeBtn('« Prev', page<=1, ()=>{ page--; render() }),
+    makeBtn('« Prev', page<=1, ()=>{ handlePageChange(page - 1) }),
   );
   // Page numbers (compact)
   for(let p=Math.max(1,page-2); p<=Math.min(totalPages, page+2); p++){
-    const b = makeBtn(String(p), false, ()=>{ page=p; render() });
+    const b = makeBtn(String(p), false, ()=>{ handlePageChange(p) });
     b.classList.add('page-num');
     if(p===page){ b.classList.remove('ghost'); b.classList.add('badge'); b.setAttribute('aria-current','page'); }
     controls.append(b);
   }
   controls.append(
-    makeBtn('Next »', page>=totalPages, ()=>{ page++; render() }),
+    makeBtn('Next »', page>=totalPages, ()=>{ handlePageChange(page + 1) }),
   );
   wrap.append(controls);
   return wrap;
