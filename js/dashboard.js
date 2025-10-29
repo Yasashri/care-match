@@ -7,16 +7,48 @@ if(!user){ showToast('Please log in'); setTimeout(()=>location.href='login.html'
 
 const content = $('#content');
 
+function formatDate(dateStr) {
+  return new Date(dateStr).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  });
+}
+
+function calculateDays(startDate, endDate) {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  const diffTime = Math.abs(end - start);
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return diffDays + (diffDays === 1 ? ' day' : ' days');
+}
+
 function bookingsSection(){
   const all = Storage.get('bookings', []);
   const mine = all.filter(b=>b.userEmail===user.email);
-  return `<div class="card" data-magnet>
+  return `<div class="card dashboard-card" data-magnet>
     <h3>Your Requests</h3>
     ${mine.length===0?'<p class="muted">No requests yet.</p>':
-      `<table class="table">
-        <tr><th>Date</th><th>Hours</th><th>Caretaker</th><th>Status</th></tr>
-        ${mine.map(b=>`<tr><td>${b.date}</td><td>${b.hours}</td><td>${b.caretakerName}</td><td>${b.status}</td></tr>`).join('')}
-      </table>`
+      `<div class="requests-table">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Dates</th>
+              <th>Duration</th>
+              <th>Caretaker</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${mine.map(b=>`<tr>
+              <td data-label="Dates">${formatDate(b.startDate)} - ${formatDate(b.endDate)}</td>
+              <td data-label="Duration">${calculateDays(b.startDate, b.endDate)}</td>
+              <td data-label="Caretaker">${b.caretakerName}</td>
+              <td data-label="Status"><span class="badge">${b.status}</span></td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>`
     }
   </div>`
 }
